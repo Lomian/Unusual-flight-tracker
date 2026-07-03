@@ -2,8 +2,8 @@ import requests
 import polars as pl
 
 
-##url = "https://api.airplanes.live/v2/point/52.3676/4.9041/100"
-url = "https://api.airplanes.live/v2/point/33.4484/-112.0740/100"
+##url = "https://api.airplanes.live/v2/point/52.3676/4.9041/100" around the netherlands
+url = "https://api.airplanes.live/v2/point/33.4484/-112.0740/100"  ##phoenix area
 resp = requests.get(url, timeout=10)
 resp.raise_for_status()
 
