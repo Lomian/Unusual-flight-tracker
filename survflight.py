@@ -3,6 +3,10 @@ import polars as pl
 from datetime import datetime, timezone
 import time
 
+
+rotationdict = {}
+
+
 while True:
     ##url = "https://api.airplanes.live/v2/point/52.3676/4.9041/100" around the netherlands
     url = "https://api.airplanes.live/v2/point/33.4484/-112.0740/100"  ##phoenix area
@@ -72,4 +76,11 @@ while True:
 
 
     print(df)
-    time.sleep(10)
+    for hex, value in zip(df["hex"], df["track"]): ## iterate over both of these integers and make hex the name of the list and make track the values monitored in that list.
+        rotationdict[hex] = value
+
+
+
+    print(rotationdict)
+    time.sleep(2)
+
