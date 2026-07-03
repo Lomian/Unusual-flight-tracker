@@ -77,8 +77,9 @@ while True:
 
     print(df)
     for hex, value in zip(df["hex"], df["track"]): ## iterate over both of these integers and make hex the name of the list and make track the values monitored in that list.
-        rotationdict[hex] = value
-
+        if hex not in rotationdict:
+            rotationdict[hex] = []
+        rotationdict[hex].append(value)
 
 
     print(rotationdict)
