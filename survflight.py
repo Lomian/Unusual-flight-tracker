@@ -84,7 +84,7 @@ while True:
             turn_totals[hex] = 0.0 ##assigns it zero because we dont know how much the aircraft turned yet
 
 
-        previous_tracks = rotationdict[hex] ##assigns the current airplanes location dictionary to the previous_hex variable
+        previous_tracks = rotationdict[hex] ##assigns the current airplanes track dictionary to the previous_hex variable
 
         if previous_tracks and value is not None and previous_tracks[-1] is not None:
             prev_track = previous_tracks[-1]
