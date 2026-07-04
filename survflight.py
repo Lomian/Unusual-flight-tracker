@@ -9,6 +9,9 @@ turn_score = 0
 valid_turns = 0.0
 turn_totals = {}
 while True:
+    ## api: https://api.airplanes.live/v2/point/{latitude}/{longitude}/{radius from that point in nautical miles, maximum of 250}
+
+
     ##url = "https://api.airplanes.live/v2/point/52.3676/4.9041/100" around the netherlands
     url = "https://api.airplanes.live/v2/point/33.4484/-112.0740/100"  ##phoenix area
     resp = requests.get(url, timeout=10)
