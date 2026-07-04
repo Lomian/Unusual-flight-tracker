@@ -5,7 +5,7 @@ import time
 
 
 rotationdict = {}
-
+turn_score = 0
 
 while True:
     ##url = "https://api.airplanes.live/v2/point/52.3676/4.9041/100" around the netherlands
@@ -24,8 +24,7 @@ while True:
     pl.Config.set_tbl_width_chars(2000)
     pl.Config.set_fmt_str_lengths(2000)
 
-
-
+    track_rates = []
 
 
     rows = [{
@@ -75,13 +74,33 @@ while True:
 
 
 
-    print(df)
+
     for hex, value in zip(df["hex"], df["track"]): ## iterate over both of these integers and make hex the name of the list and make track the values monitored in that list.
         if hex not in rotationdict: ## checks if aircraft hex isn't already a list
             rotationdict[hex] = []       ## assigns the aircraft hex to rotationdict as a list
+
+
+        previous_tracks = rotationdict[hex]
+
+        if previous_tracks and value is not None and previous_tracks[-1] is not None:
+            prev_track = previous_tracks[-1]
+            track_rate = abs(((value - prev_track + 180) % 360) - 180)
+
+        else:
+            track_rate = None
         rotationdict[hex].append(value) ## puts that value at that hex into the list
+        track_rates.append(track_rate)
+
+    df = df.with_columns(
+        pl.Series("turningrate", track_rates)
+    )
 
 
+
+
+
+
+    print(df)
     print(rotationdict)
     time.sleep(2)
 
