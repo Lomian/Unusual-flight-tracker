@@ -7,6 +7,7 @@ import time
 rotationdict = {}
 turn_score = 0
 valid_turns = 0.0
+turn_totals = {}
 while True:
     ##url = "https://api.airplanes.live/v2/point/52.3676/4.9041/100" around the netherlands
     url = "https://api.airplanes.live/v2/point/33.4484/-112.0740/100"  ##phoenix area
@@ -79,22 +80,25 @@ while True:
         if hex not in rotationdict: ## checks if aircraft hex isn't already a list
             rotationdict[hex] = []       ## assigns the aircraft hex to rotationdict as a list
 
+        if hex not in turn_totals: ##creates the entry hex for a new aircraft
+            turn_totals[hex] = 0.0 ##assigns it zero because we dont know how much the aircraft turned yet
 
-        previous_tracks = rotationdict[hex]
+
+        previous_tracks = rotationdict[hex] ##assigns the current airplanes location dictionary to the previous_hex variable
 
         if previous_tracks and value is not None and previous_tracks[-1] is not None:
             prev_track = previous_tracks[-1]
-            turning_rate = abs(((value - prev_track + 180) % 360) - 180)
-            valid_turns += turning_rate ##summing the differences
+            turning_rate = abs(((value - prev_track + 180) % 360) - 180) ##calculates the difference between the last and second to last turns.
+            turn_totals[hex] += turning_rate ##summing the differences so we can eventually rank them over time, how bigger the number how more turns the aircraft did in that time.
         else:
             turning_rate = None
         rotationdict[hex].append(value) ## puts that value at that hex into the list
 
 
-        turning_rates.append(valid_turns)
+        turning_rates.append(turn_totals[hex])
 
     df = df.with_columns(
-        pl.Series("turningrate", turning_rates)
+        pl.Series("turningrate", turning_rates, dtype=pl.Float64)
     )
 
 
