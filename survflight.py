@@ -6,7 +6,7 @@ import time
 
 rotationdict = {}
 turn_score = 0
-
+valid_turns = 0.0
 while True:
     ##url = "https://api.airplanes.live/v2/point/52.3676/4.9041/100" around the netherlands
     url = "https://api.airplanes.live/v2/point/33.4484/-112.0740/100"  ##phoenix area
@@ -24,7 +24,7 @@ while True:
     pl.Config.set_tbl_width_chars(2000)
     pl.Config.set_fmt_str_lengths(2000)
 
-    track_rates = []
+    turning_rates = []
 
 
     rows = [{
@@ -84,15 +84,17 @@ while True:
 
         if previous_tracks and value is not None and previous_tracks[-1] is not None:
             prev_track = previous_tracks[-1]
-            track_rate = abs(((value - prev_track + 180) % 360) - 180)
-
+            turning_rate = abs(((value - prev_track + 180) % 360) - 180)
+            valid_turns += turning_rate ##summing the differences
         else:
-            track_rate = None
+            turning_rate = None
         rotationdict[hex].append(value) ## puts that value at that hex into the list
-        track_rates.append(track_rate)
+
+
+        turning_rates.append(valid_turns)
 
     df = df.with_columns(
-        pl.Series("turningrate", track_rates)
+        pl.Series("turningrate", turning_rates)
     )
 
 
