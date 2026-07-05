@@ -1,46 +1,45 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QTableView
-from PyQt6.QtGui import QStandardItemModel, QStandardItem
 
+from PyQt6.QtCore import QTimer
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QTableView, QTableWidgetItem, QTableWidget
+from PyQt6.QtGui import QStandardItemModel, QStandardItem
+import polars as pl
 
 class HelloApp(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.table = QTableWidget()
         self.setWindowTitle("SurvFlight")
         self.setGeometry(1200, 100, 900, 600)
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.load_data)
+        self.timer.start(2000)
+
+        self.load_data()
 
         layout = QVBoxLayout()
 
-        table = QTableView()
-
-        model = QStandardItemModel(100, 15)
-        model.setHorizontalHeaderLabels([
-            "Hex", "Flight", "Squawk", "Registry", "Type", "desc","alt_baro","gs","mach","track","track_rate","baro_rate","latitude","longitude","seen_pos","seen"
+        layout = QVBoxLayout()
+        layout.addWidget(self.table)
+        self.setLayout(layout)
 
 
-
-
-
-        ])
-
-        data = [
-            "a01c57",
-            "N106PV",
-            "SSTL",
-            "JUST JA30 SuperSTOL",
-            "70.1"
-        ]
-
-        for column, value in enumerate(data):
-            model.setItem(0, column, QStandardItem(value))
-
-        table.setModel(model)
-
-        layout.addSpacing(300)
-        layout.addWidget(table)
 
         self.setLayout(layout)
+
+    def load_data(self):
+        try:
+            df = pl.read_json("aircraft_data.json")
+        except Exception:
+            return
+        self.table.setRowCount(df.height)
+        self.table.setColumnCount(len(df.columns))
+        self.table.setHorizontalHeaderLabels(df.columns)
+
+        for row_i, row in enumerate(df.iter_rows()):
+            for col_i, value in enumerate(row):
+                self.table.setItem(row_i, col_i, QTableWidgetItem(str(value)))
 
 
 app = QApplication(sys.argv)
