@@ -63,7 +63,7 @@ while True:
 
 
 
-            (~pl.col("flight").str.contains("KLM|RYR|EZY|EWG|BEL|DAL|UAL|AAL|ACA|BAW|QTR|UAE|CPA|SAS|IBE|AFR|DLH|TAP|THY|TRA|TUI|CFG|EXS|JAF|TOM|FDX|UPS|OCN").fill_null(False))
+            (~pl.col("flight").str.contains("KLM|RYR|EZY|EWG|BEL|DAL|UAL|AAL|ACA|BAW|QTR|UAE|CPA|SAS|IBE|AFR|DLH|TAP|THY|TRA|TUI|CFG|EXS|JAF|TOM|FDX|UPS|OCN|SWA|JBU|FFT|NKS|ASA|SKW|ENY|RPA|EDV|PDT|ASH|JIA|YX|OO|GJS|AWI|CPZ|LOF|EJA|LXJ|VXP|JSX|HAL|ALK|SUN|SCX|AAY|VIR|WJA|POE|FFT|VOI|VLG|EIN|FIN|LOT|AUA|SWR|AIC|ETD|MSR|KAC|RAM|ETH|SIA|ANA|JAL|CSN|CES|CCA|CXA|CAL|EVA|KAL|AMX|AVA|CMP|LAN|TAM|GLO|AZU|JBU|ABX|GTI|ATN|CKS|CJT").fill_null(False))
         ).with_columns(
             pl.col("alt_baro").cast(pl.Int64, strict=False),
             pl.col("alt_baro").rank().alias("alt_rank"),
@@ -108,7 +108,7 @@ while True:
 
 
 
-
+    df.write_json("aircraft_data.json")
     print(df)
     print(rotationdict)
     time.sleep(2)
