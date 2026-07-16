@@ -1,7 +1,7 @@
 import sys
 
 from PyQt6.QtCore import QTimer
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QTableView, QTableWidgetItem, QTableWidget
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QTableView, QTableWidgetItem, QTableWidget, QLabel
 from PyQt6.QtGui import QStandardItemModel, QStandardItem
 import polars as pl
 
@@ -11,17 +11,23 @@ class HelloApp(QWidget):
 
         self.table = QTableWidget()
         self.setWindowTitle("SurvFlight")
-        self.setGeometry(1200, 100, 900, 600)
+        self.setGeometry(1000, 100, 900, 600)
         self.timer = QTimer()
         self.timer.timeout.connect(self.load_data)
         self.timer.start(2000)
 
         self.load_data()
 
-        layout = QVBoxLayout()
 
         layout = QVBoxLayout()
+        label = QLabel("Flight track epic track")
+
+        layout.addWidget(label)
+
+        layout.addSpacing(300)
+
         layout.addWidget(self.table)
+
         self.setLayout(layout)
 
 
@@ -30,7 +36,7 @@ class HelloApp(QWidget):
 
     def load_data(self):
         try:
-            df = pl.read_json("aircraft_data.json")
+            df = pl.read_json("aircraft_data.json") #reads the json file here
         except Exception:
             return
         self.table.setRowCount(df.height)
